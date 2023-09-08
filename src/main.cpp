@@ -18,6 +18,7 @@ const int Buzz = 12; //Speaker Output
 const int Passcode = 5555;  //Current Passcode
 int code = 0;
 int buttonUpdate = 0;
+int runloop = 1;
 
 unsigned long buttonTime = 0;
 bool buttonPressed = false;
@@ -51,27 +52,47 @@ void setup()
 void loop()
  {
   if(code > 999) {
-      if(code == Passcode) {
-            Serial.print("          ");
-            Serial.println("CORRECT! Door Opens!");
+      if(code == Passcode) {runloop = 0;
+      }
+      switch(runloop) {
+        case 0: 
+            Serial.println("              CORRECT! Door Opens!");
             Serial.print('\n');
             // Insert code to activate door
             code = 0;
-
-                
-                
-      }
-    code = 0;
-    Serial.print("-");   
-    Serial.print('\n');
-    tone(Buzz,Tone_A);
-    delay(100);
-    tone(Buzz,Tone_E);
-    delay(100);
-    tone(Buzz,Tone_D);
-    delay(100);
-    buttonPressed = false;
+            delay(300);
+            tone(Buzz,Tone_D);
+            delay(300);
+            tone(Buzz,Tone_E);
+            delay(300);
+            tone(Buzz,Tone_A);
+            delay(300);
+            tone(Buzz,Tone_D);
+            delay(300);
+            tone(Buzz,Tone_E);
+            delay(300);
+            tone(Buzz,Tone_A);
+            delay(300);
+            buttonPressed = false;
+            runloop = 1;
+            break;
+  
+        case 1:
+            code = 0;
+            Serial.print("          - Incorrect, Please Try Again -");   
+            Serial.print('\n');
+            tone(Buzz,Tone_A);
+            delay(100);
+            tone(Buzz,Tone_E);
+            delay(100);
+            tone(Buzz,Tone_D);
+            delay(100);
+            buttonPressed = false;
+            break;  }
   }
+
+
+  
   if (((buttonTime + 2000) < millis()) && buttonPressed)
     {
     code = 0;
